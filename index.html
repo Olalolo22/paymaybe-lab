@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PayMaybe — Buy now. Pay maybe.</title>
+  <meta name="description" content="Every checkout is a provably fair spin. One in a hundred is free. Built on Solana with MagicBlock Ephemeral Rollups and VRF.">
+  <meta name="theme-color" content="#0A3A2C">
+  <meta property="og:title" content="PayMaybe — Buy now. Pay maybe.">
+  <meta property="og:description" content="Every checkout is a provably fair spin. One in a hundred is free.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,600;87.5,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ink texture for rubber stamps -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="ink">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/>
+    </filter>
+  </svg>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="topbar-in">
+      <a class="brand" href="#/" aria-label="PayMaybe home">
+        <svg class="brand-mark" viewBox="0 0 28 34" aria-hidden="true"><path d="M2 2h24v26l-3-2-3 2-3-2-3 2-3-2-3 2-3-2-3 2z" fill="#F6F5EF"/><path d="M7 9h14M7 14h9M7 20h14" stroke="#2E2B63" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>PayMaybe</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="#/" data-nav="/">Shop</a>
+        <a href="#/vault" data-nav="/vault">Vault</a>
+        <a href="#/fair" data-nav="/fair">Fair play</a>
+      </nav>
+      <button class="wallet-btn" id="walletBtn" type="button">Connect wallet</button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ SHOP ============ -->
+    <section class="view" data-view="/" aria-labelledby="h-shop">
+      <div class="hero wrap">
+        <div class="hero-copy">
+          <h1 id="h-shop">Buy now.<br>Pay maybe.</h1>
+          <p class="lede">Every checkout comes with one spin. You might get 25% back, half back, or the whole thing free, and every spin earns shards you can cash in later.</p>
+          <div class="hero-actions">
+            <a class="btn btn-key" href="#shelf">Pick something</a>
+            <a class="btn btn-line" href="#/fair">See the odds</a>
+          </div>
+          <dl class="hero-facts">
+            <div><dt>Free</dt><dd>1 in 100</dd></div>
+            <div><dt>Something back</dt><dd>1 in 4</dd></div>
+            <div><dt>Shards</dt><dd>every time</dd></div>
+          </dl>
+        </div>
+        <figure class="hero-stage">
+          <div id="heroReceipt" class="receipt-host receipt-host--hero"></div>
+          <figcaption class="hero-cap">
+            <span id="heroCapText">A free roll, printed. It happens on 1 checkout in 100.</span>
+            <button class="link-btn" id="heroReplay" type="button">Print again</button>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="shelf wrap" id="shelf">
+        <div class="section-head">
+          <h2>Today's shelf</h2>
+          <p>Prices are in devnet SOL. Each item includes one spin at checkout.</p>
+        </div>
+        <ul class="tags" id="tags"></ul>
+      </div>
+
+      <div class="flow wrap">
+        <div class="section-head">
+          <h2>What happens when you pay</h2>
+          <p>Four steps, each one a transaction you can look up.</p>
+        </div>
+        <ol class="flow-list">
+          <li>
+            <h3>Your payment is held</h3>
+            <p>The price goes into the store's vault on Solana. Nothing is refunded or kept until your spin settles.</p>
+          </li>
+          <li>
+            <h3>Your spin goes private</h3>
+            <p>Your checkout moves into a private MagicBlock rollup. While it's there, nobody else can read it.</p>
+          </li>
+          <li>
+            <h3>A number is drawn</h3>
+            <p>MagicBlock VRF draws a number from 0 to 9,999. Nobody can choose it, the store included.</p>
+          </li>
+          <li>
+            <h3>The result is settled</h3>
+            <p>The result is written back to Solana. Claim your cashback or sell shards whenever you like.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CHECKOUT ============ -->
+    <section class="view" data-view="/checkout" aria-labelledby="h-checkout" hidden>
+      <div class="wrap checkout">
+        <a class="back" href="#/">Back to the shelf</a>
+        <div class="checkout-grid">
+          <div class="checkout-paper">
+            <div id="checkoutReceipt" class="receipt-host"></div>
+          </div>
+          <div class="checkout-side">
+            <h1 id="h-checkout" class="checkout-title"></h1>
+            <p class="checkout-sub" id="checkoutSub"></p>
+
+            <div class="pay-box" id="payBox">
+              <button class="btn btn-key btn-wide" id="payBtn" type="button"></button>
+              <p class="pay-note" id="payNote"></p>
+            </div>
+
+            <ol class="steps" id="steps" aria-live="polite">
+              <li data-step="escrow"><span class="dot" aria-hidden="true"></span><div><b>Payment held</b><small>SOL escrowed in the store vault on Solana</small></div></li>
+              <li data-step="sealed"><span class="dot" aria-hidden="true"></span><div><b>Spin sealed</b><small>Moved into a private MagicBlock rollup</small>
+                <button class="link-btn stranger-toggle" id="strangerBtn" type="button" hidden>Compare with a stranger's view</button></div></li>
+              <li data-step="roll"><span class="dot" aria-hidden="true"></span><div><b>Number drawn</b><small>MagicBlock VRF, 0 to 9,999</small></div></li>
+              <li data-step="settle"><span class="dot" aria-hidden="true"></span><div><b>Settled</b><small>Result committed back to Solana</small></div></li>
+            </ol>
+
+            <div class="carbon" id="carbon" hidden>
+              <div class="carbon-col">
+                <h3>Your copy</h3>
+                <pre id="carbonYours"></pre>
+              </div>
+              <div class="carbon-col carbon-col--stranger">
+                <h3>A stranger's copy</h3>
+                <pre id="carbonStranger"></pre>
+              </div>
+              <p class="carbon-note">Demo view. In the live build, this reads the same account from the private rollup with and without your session token.</p>
+            </div>
+
+            <div class="result" id="result" hidden>
+              <p class="result-line" id="resultLine"></p>
+              <div class="result-actions">
+                <a class="btn btn-key" href="#/vault" id="resultPrimary">Claim in vault</a>
+                <a class="btn btn-line" href="#/">Back to the shelf</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VAULT ============ -->
+    <section class="view" data-view="/vault" aria-labelledby="h-vault" hidden>
+      <div class="wrap vault">
+        <div class="section-head">
+          <h1 id="h-vault">Your vault</h1>
+          <p>Cashback you've won and shards you've earned. Both pay out from the store's vault on Solana.</p>
+        </div>
+
+        <div class="vault-grid">
+          <article class="slip" aria-labelledby="h-cash">
+            <h2 id="h-cash">Cashback</h2>
+            <p class="slip-amount"><span id="cashAmount">0.0000</span> <small>SOL</small></p>
+            <p class="slip-note" id="cashNote"></p>
+            <button class="btn btn-key btn-wide" id="claimBtn" type="button">Claim cashback</button>
+          </article>
+
+          <article class="chips" aria-labelledby="h-shards">
+            <div class="chips-head">
+              <h2 id="h-shards">Shards</h2>
+              <p class="chips-count"><span id="shardCount">0</span></p>
+            </div>
+            <div class="chip-stack" id="chipStack" aria-hidden="true"></div>
+            <p class="chips-rate">Each shard sells back for 100 lamports. You earn 10 to 100 on every spin.</p>
+            <div class="sell">
+              <label for="sellRange">Sell <b id="sellQty">0</b> shards for <b id="sellValue">0.0000000</b> SOL</label>
+              <input type="range" id="sellRange" min="0" max="0" step="10" value="0">
+              <button class="btn btn-shard btn-wide" id="sellBtn" type="button">Sell shards</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="stubs-wrap">
+          <h2>Your receipts</h2>
+          <ul class="stubs" id="stubs"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAIR PLAY ============ -->
+    <section class="view" data-view="/fair" aria-labelledby="h-fair" hidden>
+      <div class="wrap fair">
+        <div class="section-head">
+          <h1 id="h-fair">Fair play</h1>
+          <p>Every spin draws one number from 0 to 9,999. Where it lands on this strip decides what you get back.</p>
+        </div>
+
+        <div class="strip-wrap">
+          <div class="strip" id="strip" role="img" aria-label="Number line from 0 to 9,999: 0 to 7,499 earns shards, 7,500 to 9,299 is 25% back, 9,300 to 9,899 is half back, 9,900 to 9,999 is free.">
+            <span class="seg seg-none" style="flex:75"><i>Shards</i></span>
+            <span class="seg seg-quarter" style="flex:18"><i>25%</i></span>
+            <span class="seg seg-half" style="flex:6"><i>50%</i></span>
+            <span class="seg seg-free" style="flex:1"><i>Free</i></span>
+            <div class="strip-marks" id="stripMarks"></div>
+          </div>
+          <div class="strip-scale" aria-hidden="true"><span>0</span><span>7,500</span><span>9,300</span><span>9,999</span></div>
+          <p class="strip-legend" id="stripLegend">Your rolls show up here as you check out.</p>
+        </div>
+
+        <table class="odds">
+          <caption>What each roll pays</caption>
+          <thead><tr><th scope="col">Roll</th><th scope="col">Chance</th><th scope="col">Cashback</th><th scope="col">Shards</th></tr></thead>
+          <tbody>
+            <tr class="t-free"><td>9,900 – 9,999</td><td>1%</td><td>100% of the price</td><td>10</td></tr>
+            <tr class="t-half"><td>9,300 – 9,899</td><td>6%</td><td>50%</td><td>25</td></tr>
+            <tr class="t-quarter"><td>7,500 – 9,299</td><td>18%</td><td>25%</td><td>50</td></tr>
+            <tr class="t-none"><td>0 – 7,499</td><td>75%</td><td>None</td><td>100</td></tr>
+          </tbody>
+        </table>
+
+        <div class="fair-cols">
+          <div>
+            <h2>Why nobody can rig it</h2>
+            <p>The number comes from MagicBlock's verifiable random function. The oracle signs it, the program checks the signature before it pays anything, and the request includes a seed from your wallet. The store can't pick a number and neither can you.</p>
+            <p>The odds above are written into the store's account when it opens, so they can be checked on-chain.</p>
+          </div>
+          <div>
+            <h2>What's real in this prototype</h2>
+            <ul class="plain">
+              <li>The draw uses your browser's cryptographic random generator and the same 0–9,999 ranges as the program.</li>
+              <li>The wallet, balances and transaction IDs are simulated so you can try the flow without devnet SOL. Nothing here links to an explorer.</li>
+              <li>Your demo state is saved in this browser only.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <p>PayMaybe design prototype for Solana Blitz v10. Built on MagicBlock Ephemeral Rollups and VRF.</p>
+      <p class="demo-pill"><span class="pulse" aria-hidden="true"></span>Demo mode: simulated devnet</p>
+    </div>
+  </footer>
+
+  <!-- Demo controls -->
+  <button class="demo-fab" id="demoFab" type="button" aria-expanded="false" aria-controls="demoSheet">Demo controls</button>
+  <div class="demo-sheet" id="demoSheet" hidden>
+    <h2>Demo controls</h2>
+    <p>For recording the walkthrough. These don't exist in the real app.</p>
+    <fieldset>
+      <legend>Next roll</legend>
+      <label><input type="radio" name="force" value="random" checked> Random</label>
+      <label><input type="radio" name="force" value="free"> Free</label>
+      <label><input type="radio" name="force" value="half"> 50% back</label>
+      <label><input type="radio" name="force" value="quarter"> 25% back</label>
+      <label><input type="radio" name="force" value="none"> Shards only</label>
+    </fieldset>
+    <fieldset>
+      <legend>Speed</legend>
+      <label><input type="radio" name="speed" value="1" checked> Real pace</label>
+      <label><input type="radio" name="speed" value="0.45"> Fast</label>
+    </fieldset>
+    <button class="btn btn-line btn-wide" id="resetBtn" type="button">Reset demo wallet</button>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
