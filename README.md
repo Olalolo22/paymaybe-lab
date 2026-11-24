@@ -1,4 +1,6 @@
 # PayMaybe Lab
+<p align="center"><img src="paymaybe-hero.gif" width="720" alt="PayMaybe checkout demo"></p>
+
 
 **Buy now. Pay maybe.** The UI/UX prototype for PayMaybe, a Solana Blitz v10 (Entertainment Finance) entry.
 
